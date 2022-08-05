@@ -1,6 +1,6 @@
 const inputAdd = document.getElementById("input-add-todo");
 const todoCtn = document.getElementById("todo-container");
-
+let check = true;
 inputAdd.onkeyup = (event) => {
   if (event.key !== "Enter") return;
   if (inputAdd.value != "") {
@@ -32,11 +32,17 @@ function addTodo(title, completed) {
   const deleteBtn = document.createElement("button");
   deleteBtn.innerText = "Delete";
   deleteBtn.className = "btn btn-danger";
-
-  todoCtn.prepend(div);
-  div.prepend(deleteBtn);
-  div.prepend(doneBtn);
-  div.prepend(span);
+  if (check == true) {
+    todoCtn.prepend(div);
+    div.prepend(deleteBtn);
+    div.prepend(doneBtn);
+    div.prepend(span);
+  } else {
+    todoCtn.appendChild(div);
+    div.appendChild(span);
+    div.appendChild(doneBtn);
+    div.appendChild(deleteBtn);
+  }
 
   deleteBtn.onclick = () => {
     todoCtn.removeChild(div);
@@ -83,11 +89,14 @@ function saveTodo() {
 }
 
 function loadTodo() {
+  check = false;
+
   const dataStr = localStorage.getItem("todoListData");
   const data = JSON.parse(dataStr);
 
   for (const todoObj of data) {
     addTodo(todoObj.title, todoObj.completed);
   }
+  check = true;
 }
 loadTodo();
